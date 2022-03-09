@@ -265,3 +265,48 @@ function createFrames(framesData) {
     }
   }
 }
+
+// Esta función crea y retorna una animación usando los parametros: selector para elegir el id o la clase
+// del elemento, duration para definir la duración de la animación y opacity para definir el valor de la opacidad
+function fadeIn(selector, duration, opacity) {
+  var anim = gsap.set(selector, {opacity: 0});
+  anim =+ gsap.to(selector, duration, {delay:0.5, opacity:opacity});
+  return anim;
+}
+
+// Función que aplica un fade out en el elemento que se le pase por parametro
+function fadeOut(selector) {
+  var anim = gsap.to(selector, {opacity:0});
+  return anim;
+}
+
+// Función que aplica un slideFrom en el elemento que se le pase por parametro. También se puede
+// definir en que eje se realizará la animación y el ease de la misma.
+function slideFrom(selector, duration, positionX, positionY, ease) {
+  var anim = gsap.from(selector, duration, {opacity:0, x:positionX, y:positionY, ease: ease});
+  return anim;
+}
+
+// Creamos el timeline
+const tl = gsap.timeline();
+
+// Agregamos la animación en el timeline usando la función y pasando los parametros.
+tl.add(fadeIn("#headline-container", 1, 1))
+  .add(slideFrom("#copies-container", 1, 0, 90, "power1.in"))
+
+  // Si queremos que sea la misma animación podemos pasarle más parametros indicando el selector que debe animarse.
+  /* .add(slideFrom(["#cta-container","#logo-img"], .5, 0, 90)) */
+
+  // También podemos pasarle dos funciones con distintos parametros a la función add si queremos que ocurran al mismo tiempo pero con diferentes parametros.
+  .add(slideFrom("#cta-container", .5, 0, -90, "power1.in"), slideFrom("#logo-img", .5, 0, 90, "power1.in")) 
+
+  .add(fadeOut("#headline-container"), "+=3")
+  .add(fadeOut("#copies-container"), "+=3")
+    
+
+  // Ciclo que muestra la duración de cada animación
+  var animaciones = tl.getChildren(), animacion, i;
+  for (i = 0; i < animaciones.length; i++) {
+      animacion = animaciones[i];
+      console.log("animacion: ", animacion, "duration:", animacion.duration(), "startTime: ", animacion.startTime(), "endTime:", animacion.endTime());
+  } 
